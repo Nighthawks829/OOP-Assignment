@@ -14,6 +14,12 @@ public class Gui {
     // JComboBox<String> productComboBox;
     ButtonGroup payMethodButtonGroup;
 
+    JTextField customerNameTextField;
+    JTextField customerIdTextField;
+    JTextField ageTextField;
+    JTextField phoneNumberTextField;
+    JTextField customerAddressTextField;
+
     JComboBox<Product> productComboBox;
     JSpinner productSpinner;
     Product product1 = new Product("A001", "Product 1 Name", 10.00);
@@ -83,7 +89,7 @@ public class Gui {
         customerIdLabel.setBounds(30, 20, 300, 30);
         customerPanel.add(customerIdLabel);
 
-        JTextField customerIdTextField = new JTextField();
+        customerIdTextField = new JTextField();
         customerIdTextField.setBounds(130, 25, 100, 20);
         customerPanel.add(customerIdTextField);
 
@@ -91,7 +97,7 @@ public class Gui {
         customerNameLabel.setBounds(280, 20, 300, 30);
         customerPanel.add(customerNameLabel);
 
-        JTextField customerNameTextField = new JTextField();
+        customerNameTextField = new JTextField();
         customerNameTextField.setBounds(400, 25, 150, 20);
         customerPanel.add(customerNameTextField);
 
@@ -99,7 +105,7 @@ public class Gui {
         ageLabel.setBounds(30, 50, 300, 30);
         customerPanel.add(ageLabel);
 
-        JTextField ageTextField = new JTextField();
+        ageTextField = new JTextField();
         ageTextField.setBounds(130, 55, 50, 20);
         customerPanel.add(ageTextField);
 
@@ -107,7 +113,7 @@ public class Gui {
         phoneNumberLabel.setBounds(280, 50, 300, 30);
         customerPanel.add(phoneNumberLabel);
 
-        JTextField phoneNumberTextField = new JTextField();
+        phoneNumberTextField = new JTextField();
         phoneNumberTextField.setBounds(400, 55, 150, 20);
         customerPanel.add(phoneNumberTextField);
 
@@ -115,7 +121,7 @@ public class Gui {
         customerAddressLabel.setBounds(30, 80, 300, 30);
         customerPanel.add(customerAddressLabel);
 
-        JTextField customerAddressTextField = new JTextField();
+        customerAddressTextField = new JTextField();
         customerAddressTextField.setBounds(130, 85, 420, 20);
         customerPanel.add(customerAddressTextField);
 
@@ -283,6 +289,7 @@ public class Gui {
         JButton printReceiptButton = new JButton("Print Receipt");
         printReceiptButton.setBounds(350, 175, 150, 25);
         payPanel.add(printReceiptButton);
+        printReceiptButton.addActionListener(new printReceiptButtonListener());
 
         mainFrame.add(payPanel);
 
@@ -326,24 +333,24 @@ public class Gui {
         @Override
         public void actionPerformed(ActionEvent e) {
             String paymentMethod = payMethodButtonGroup.getSelection().getActionCommand();
-            String cardNumber="";
-            String expireDate="";
-            String ccv="";
-            double cash=0.0;
-            if(paymentMethod=="creditCard"){
-                cardNumber=cardNumberTextField.getText();
-                expireDate=expireDateTextField.getText();
-                ccv=ccveTextField.getText();
+            String cardNumber = "";
+            String expireDate = "";
+            String ccv = "";
+            double cash = 0.0;
+            if (paymentMethod == "creditCard") {
+                cardNumber = cardNumberTextField.getText();
+                expireDate = expireDateTextField.getText();
+                ccv = ccveTextField.getText();
                 record.setCreditCard(cardNumber, expireDate, ccv);
             }
-            if(paymentMethod=="debitCard"){
-                cardNumber=cardNumberTextField.getText();
-                expireDate=expireDateTextField.getText();
-                ccv=ccveTextField.getText();
-                record.setDebitCard(cardNumber,expireDate,ccv,cash);
+            if (paymentMethod == "debitCard") {
+                cardNumber = cardNumberTextField.getText();
+                expireDate = expireDateTextField.getText();
+                ccv = ccveTextField.getText();
+                record.setDebitCard(cardNumber, expireDate, ccv, cash);
             }
-            if(paymentMethod=="cash"){
-                cash=Double.parseDouble(payAmountTextField.getText());
+            if (paymentMethod == "cash") {
+                cash = Double.parseDouble(payAmountTextField.getText());
                 record.setCash(cash);
             }
             record.setPaymentMethod(paymentMethod);
@@ -402,5 +409,22 @@ public class Gui {
             payAmountTextField.setVisible(true);
         }
     }
+
+    class printReceiptButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            WriteFile writeFile = new WriteFile();
+            String name = customerNameTextField.getText();
+            String id = customerIdTextField.getText();
+            String age = ageTextField.getText();
+            String address = customerAddressTextField.getText();
+            String phoneNumber = phoneNumberTextField.getText();
+            String data = "Name: " + name + " ID: " + id + " Age: " + age + " Phone Number: " + phoneNumber
+                    + " Address: " + address + "\n";
+            writeFile.write(data);
+        }
+    }
+
+    
 
 }
