@@ -18,7 +18,8 @@ public class Record {
     private CreditCard creditCard;
     private DebitCard debitCard;
     private double cash;
-
+    
+    // default constructor
     Record() {
         // this.branchName="";
         // this.branchLocation="";
@@ -30,6 +31,7 @@ public class Record {
 
     }
 
+    // parameterized constructor
     Record(String recordId, String date, double totalBeforeTax, double totalAfterTax, double tax) {
         this.recordId = recordId;
         this.date = date;
@@ -38,6 +40,9 @@ public class Record {
         this.tax = tax;
     }
 
+    /**
+    * Accessors
+    **/
     public Customer getCustomer() {
         return customer;
     }
@@ -73,7 +78,10 @@ public class Record {
     public double getCash() {
         return cash;
     }
-
+    
+    /**
+    * Mutators
+    **/
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
@@ -109,7 +117,12 @@ public class Record {
     public void setCash(double cash) {
         this.cash = cash;
     }
-
+    
+    /**
+     * Decide the method of payment.
+     * Fallback value is set to cash.
+     * @param paymentMethod String paymentMethod.
+     */
     public void setPaymentMethod(String paymentMethod) {
         if(paymentMethod=="creditCard"){
             this.paymentMethod=new PayByCreditCard(creditCard);
@@ -119,31 +132,56 @@ public class Record {
             this.paymentMethod=new PayByCash(cash);
         }
     }
-
+    
+    /**
+     * Add product(object) to products arraylist. 
+     * Calls calculateTotalBeforeTax() and THEN calculateTotalAfterTax().
+     * @param product Object.
+     */
     public void addProduct(Product product) {
         products.add(product);
         calculateTotalBeforeTax();
         calculateTotalAfterTax();
     }
 
+    /**
+     * Calculate the total price BEFORE being taxed.
+     * Returns output to totalBeforeTax.
+     */
     public void calculateTotalBeforeTax() {
         double total = 0;
+        // iterate for each object in arraylist
         for (Product product : products) {
             total += product.getPrice();
         }
         totalBeforeTax = total;
     }
-
+    
+    /**
+     * Calculate total price AFTER taxed.
+     * Works by using calculateTotalAfterTax function in taxCalculator class.
+     * Returns output to totalAfterTax.
+     */
     public void calculateTotalAfterTax() {
         totalAfterTax = taxCalculator.calculateTotalAfterTax(totalBeforeTax);
     }
 
+    /**
+     * Calls makePayment function from paymentMethod class.
+     */
     public void processOrder() {
-         paymentMethod.makePayment(totalAfterTax);
+        paymentMethod.makePayment(totalAfterTax);
     }
-
+    
+    /**
+     * Calculate total price by multipliying the product price with the item quantity. 
+     * Calls calculateTotalAfterTax function of this class.
+     * @param product Object.
+     * @param quantity Amount of items.
+     */
     public void calculateTotal(Product product,int quantity){
         totalBeforeTax+=product.getPrice()*quantity;
         calculateTotalAfterTax();
+
     }
 }
