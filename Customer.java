@@ -4,7 +4,6 @@ public class Customer {
     private byte age;
     private String address;
     private String phoneNumber;
-    private String email;
 
     public Customer() {
         this.id = "";
@@ -12,16 +11,14 @@ public class Customer {
         this.age = 0;
         this.address = "";
         this.phoneNumber = "";
-        this.email = "";
     }
 
-    public Customer(String id, String name, byte age, String address, String phoneNumber, String email) {
+    public Customer(String id, String name, byte age, String address, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.email = email;
     }
 
     public String getId() {
@@ -44,10 +41,6 @@ public class Customer {
         return phoneNumber;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -68,7 +61,4 @@ public class Customer {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

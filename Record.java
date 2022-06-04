@@ -18,7 +18,7 @@ public class Record {
     private CreditCard creditCard;
     private DebitCard debitCard;
     private double cash;
-    
+
     // default constructor
     Record() {
         // this.branchName="";
@@ -41,8 +41,8 @@ public class Record {
     }
 
     /**
-    * Accessors
-    **/
+     * Accessors
+     **/
     public Customer getCustomer() {
         return customer;
     }
@@ -78,10 +78,14 @@ public class Record {
     public double getCash() {
         return cash;
     }
-    
+
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
     /**
-    * Mutators
-    **/
+     * Mutators
+     **/
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
@@ -106,36 +110,38 @@ public class Record {
         this.tax = tax;
     }
 
-    public void setCreditCard(String cardNumber,String expireDate,String ccv) {
+    public void setCreditCard(String cardNumber, String expireDate, String ccv) {
         this.creditCard = new CreditCard(cardNumber, expireDate, ccv);
     }
 
-    public void setDebitCard(String cardNumber,String expireDate,String ccv,double cash) {
-        this.debitCard = new DebitCard(cardNumber,expireDate,ccv,cash);
+    public void setDebitCard(String cardNumber, String expireDate, String ccv, double cash) {
+        this.debitCard = new DebitCard(cardNumber, expireDate, ccv, cash);
     }
 
     public void setCash(double cash) {
         this.cash = cash;
     }
-    
+
     /**
      * Decide the method of payment.
      * Fallback value is set to cash.
+     * 
      * @param paymentMethod String paymentMethod.
      */
     public void setPaymentMethod(String paymentMethod) {
-        if(paymentMethod=="creditCard"){
-            this.paymentMethod=new PayByCreditCard(creditCard);
-        }else if(paymentMethod=="debitCard"){
-            this.paymentMethod=new PayByDebitCard(debitCard);
-        }else{
-            this.paymentMethod=new PayByCash(cash);
+        if (paymentMethod == "creditCard") {
+            this.paymentMethod = new PayByCreditCard(creditCard);
+        } else if (paymentMethod == "debitCard") {
+            this.paymentMethod = new PayByDebitCard(debitCard);
+        } else {
+            this.paymentMethod = new PayByCash(cash);
         }
     }
-    
+
     /**
-     * Add product(object) to products arraylist. 
+     * Add product(object) to products arraylist.
      * Calls calculateTotalBeforeTax() and THEN calculateTotalAfterTax().
+     * 
      * @param product Object.
      */
     public void addProduct(Product product) {
@@ -156,7 +162,7 @@ public class Record {
         }
         totalBeforeTax = total;
     }
-    
+
     /**
      * Calculate total price AFTER taxed.
      * Works by using calculateTotalAfterTax function in taxCalculator class.
@@ -172,16 +178,17 @@ public class Record {
     public void processOrder() {
         paymentMethod.makePayment(totalAfterTax);
     }
-    
+
     /**
-     * Calculate total price by multipliying the product price with the item quantity. 
+     * Calculate total price by multipliying the product price with the item
+     * quantity.
      * Calls calculateTotalAfterTax function of this class.
-     * @param product Object.
+     * 
+     * @param product  Object.
      * @param quantity Amount of items.
      */
-    public void calculateTotal(Product product,int quantity){
-        totalBeforeTax+=product.getPrice()*quantity;
+    public void calculateTotal(Product product, int quantity) {
+        totalBeforeTax += product.getPrice() * quantity;
         calculateTotalAfterTax();
-
     }
 }

@@ -49,6 +49,23 @@ public class Gui {
     public void display() {
         mainFrame = new JFrame("Point-of-Sales System");
 
+        // GUI menu bar
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Menu");
+
+        // Menu bar item
+        JMenuItem loadData = new JMenuItem("Load Data");
+        JMenuItem exit = new JMenuItem("Exit");
+
+        loadData.addActionListener(new loadDataListener());
+        exit.addActionListener(new exitListener());
+
+        menu.add(loadData);
+        menu.add(exit);
+
+        menuBar.add(menu);
+        mainFrame.setJMenuBar(menuBar);
+
         JPanel titlePanel = new JPanel();
         titlePanel.setBackground(Color.RED);
         titlePanel.setLayout(null);
@@ -299,6 +316,38 @@ public class Gui {
         mainFrame.setVisible(true);
     }
 
+    class loadDataListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            mainFrame.dispose();
+            JFrame readFrame=new JFrame("Record");
+
+            JTextArea outpuTextArea = new JTextArea("output");
+            outpuTextArea.setBorder(BorderFactory.createLineBorder(Color.black));
+            outpuTextArea.setFont(new Font("Ubuntu", Font.BOLD, 12));
+            outpuTextArea.setEditable(false);
+            JScrollPane scrollPane = new JScrollPane(outpuTextArea);
+            readFrame.add(scrollPane);
+            scrollPane.setBounds(50, 50, 300, 200);
+
+            readFrame.setSize(500, 500);
+            readFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            readFrame.setLayout(null);
+            readFrame.setVisible(true);
+
+        }
+    }
+
+    class exitListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int confirmed = JOptionPane.showConfirmDialog(mainFrame, "Are you want to exit?");
+            if (confirmed == JOptionPane.YES_OPTION) {
+                mainFrame.dispose();
+            }
+        }
+    }
+
     class addProductButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -320,7 +369,7 @@ public class Gui {
             DefaultTableModel model = (DefaultTableModel) productTable.getModel();
             model.addRow(row);
 
-            // record.addProduct(selectedProduct);
+            record.addProduct(selectedProduct);
 
             record.calculateTotal(selectedProduct, quantity);
             totalBeforeTaxLabel.setText("Total Before Tax: RM" + String.valueOf(record.getTotalBeforeTax()));
@@ -416,15 +465,19 @@ public class Gui {
             WriteFile writeFile = new WriteFile();
             String name = customerNameTextField.getText();
             String id = customerIdTextField.getText();
-            String age = ageTextField.getText();
+            int age = Integer.parseInt(ageTextField.getText());
             String address = customerAddressTextField.getText();
             String phoneNumber = phoneNumberTextField.getText();
+            String paymentMethod = payMethodButtonGroup.getSelection().getActionCommand();
+            double total=record.getTotalAfterTax();
+
+
+            Customer newCustomer = new Customer(id, name, (byte) age, address, phoneNumber);
             String data = "Name: " + name + " ID: " + id + " Age: " + age + " Phone Number: " + phoneNumber
                     + " Address: " + address + "\n";
+
+            
             writeFile.write(data);
         }
     }
-
-    
-
 }
