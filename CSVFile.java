@@ -105,7 +105,7 @@ public class CSVFile {
      */
     public static void createProductCSVfile(String productFilename) {
 
-        File producFile = new File(productFilename + ".csv");
+        File producFile = new File(productFilename);
         System.out.println("File created: " + producFile.getName());
 
         FileWriter writer;
