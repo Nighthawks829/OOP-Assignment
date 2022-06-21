@@ -75,6 +75,8 @@ public class CSVFile {
     
     /*
      * Write(Overwrite) the productCSV data to a new one
+     * @param productFilenameString
+     * @param products
      */
     public static void writeProduct(String productFilenameString, ArrayList<Product> products) {
 
@@ -101,7 +103,8 @@ public class CSVFile {
     
     
     /*
-     * Create product CSV if file is missing
+     * Create product CSV if file is missing.
+     * @param productFilename
      */
     public static void createProductCSVfile(String productFilename) {
 
