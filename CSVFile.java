@@ -36,25 +36,23 @@ public class CSVFile {
 
         ArrayList<Product> products = new ArrayList<>();
         Path pathToFile = Paths.get(productFilename);
+        
+        if (Files.notExists(pathToFile)) {  // if the productCSV file is missing, create a new one
+            createProductCSVfile(productFilename);
+        }
 
         try (BufferedReader bufferedreaderObject = Files.newBufferedReader(pathToFile, StandardCharsets.US_ASCII)) {
             String line = bufferedreaderObject.readLine();
 
             while (line != null) {
-
                 String[] variable = line.split(",");
-
                 Product product = createProduct(variable);
-
                 products.add(product);
-
                 line = bufferedreaderObject.readLine();
             }
-
         } catch (Exception errorReadCSV) {
             errorReadCSV.printStackTrace();
         }
-
         return products;
     }
 
@@ -73,5 +71,58 @@ public class CSVFile {
 
         return new Product(id, name, price, quantity);
     }
+    
+    
+    /*
+     * Write(Overwrite) the productCSV data to a new one
+     */
+    public static void writeProduct(String productFilenameString, ArrayList<Product> products) {
 
+        try {
+            FileWriter fileWrt = new FileWriter(productFilenameString);
+            BufferedWriter bufferWrt = new BufferedWriter(fileWrt);
+
+            for (Product product : products) {
+                System.out.println(product.getId().toString());
+                bufferWrt.write(product.getId().toString() + ",");
+                bufferWrt.write(product.getName().toString() + ",");
+                bufferWrt.write(Double.toString(product.getPrice()) + ",");
+                bufferWrt.write(Integer.toString(product.getQuantity()) + "\n");
+
+                bufferWrt.flush();
+                bufferWrt.close();
+                System.out.println("File updated successfully!");
+            }
+
+        } catch (IOException writeError) {
+            writeError.printStackTrace();
+        }
+    }    
+    
+    
+    /*
+     * Create product CSV if file is missing
+     */
+    public static void createProductCSVfile(String productFilename) {
+
+        File producFile = new File(productFilename + ".csv");
+        System.out.println("File created: " + producFile.getName());
+
+        FileWriter writer;
+        try {
+            writer = new FileWriter(productFilename);
+
+            // this is the original template for product, change here
+            writer.append("A001,Product 1 Name,10.00,100\n");
+            writer.append("A002,Product 2 Name,20.00,10\n");
+            writer.append("A003,Product 3 Name,30.00,200\n");
+            writer.append("A004,Product 4 Name,40.00,5\n");
+            writer.append("A005,Product 5 Name,50.00,50");
+
+            writer.flush();
+            writer.close();
+        } catch (IOException writeError) {
+            writeError.printStackTrace();
+        }
+    }
 }
