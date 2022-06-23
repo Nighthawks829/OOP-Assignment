@@ -1,31 +1,24 @@
-import javax.swing.*;
-import java.awt.event.*;
-import java.util.Hashtable;
 
+import javax.swing.*;
 import java.util.ArrayList;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class LoginGui {
 
-    // private String loginPassword;
-    ArrayList<Product> productList;
+    private ArrayList<Product> productList;
+    private ArrayList<User> userList;
 
     JFrame loginFrame;
     JTextField employeeIdTextField;
     JTextField passwordTextField;
-    Hashtable<String, String> adminList;
 
     private String nextGui = "";
 
-    public LoginGui(ArrayList<Product> productList, String nextGui) {
+    public LoginGui(ArrayList<Product> productList, ArrayList<User> userList, String nextGui) {
         this.productList = productList;
-
+        this.userList = CSVUserfile.readCSVUserFile();
         this.nextGui = nextGui;
-
-        adminList = new Hashtable<String, String>();
-
-        adminList.put("E123", "ABC12345");
-        adminList.put("E456", "ABC67890");
-        adminList.put("E789", "EFG12345");
     }
 
     public void display() {
@@ -63,19 +56,27 @@ public class LoginGui {
         public void actionPerformed(ActionEvent e) {
             String id = employeeIdTextField.getText();
             String password = passwordTextField.getText();
+            boolean validUser = false;
 
-            if (adminList.containsKey(id) && adminList.get(id).equals(password)) {
+            for (int i = 0; i < userList.size(); i++) {
+                if (id.equals(userList.get(i).getUsername()) && password.equals(userList.get(i).getPassword())) {
+                    validUser = true;
+                    break;
+                }
+            }
+            
+            if (validUser) {
+                JOptionPane.showMessageDialog(null, "Login Successful");
                 if (nextGui == "editProduct") {
                     EditProductGui editProduct = new EditProductGui(productList);
                     loginFrame.dispose();
                     editProduct.display();
                 } else {
-                    loginFrame.dispose();
                     AddProductGui addProduct = new AddProductGui(productList);
                     loginFrame.dispose();
                     addProduct.display();
                 }
-            } else {
+            } else {  // this code runs for each user itteration, need fixing
                 JOptionPane.showMessageDialog(loginFrame, "Invalid Employee ID or Password", "Alert",
                         JOptionPane.WARNING_MESSAGE);
             }
