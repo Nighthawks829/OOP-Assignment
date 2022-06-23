@@ -11,6 +11,8 @@ import java.util.Random;
 import java.util.ArrayList;
 
 public class Gui {
+    
+    // gui attributes
     JFrame mainFrame;
 
     JTextField customerNameTextField;
@@ -20,9 +22,10 @@ public class Gui {
     JTextField customerAddressTextField;
     JButton firstPageButton;
 
+    // non-gui attributes
     Customer newCustomer;
     Record newRcord;
-
+    private String title = "Supermarket Point-of-Sales System";   // title, modify this value to change the title
     ArrayList<Product> productListObject;
 
     public Gui(ArrayList<Product> products) {
@@ -41,7 +44,7 @@ public class Gui {
     }
 
     public void display() {
-        mainFrame = new JFrame("Supermarket Point-of-Sales System");
+        mainFrame = new JFrame(title);
 
         // GUI menu bar
         JMenuBar menuBar = new JMenuBar();
@@ -175,7 +178,7 @@ public class Gui {
     class exitListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            int confirmed = JOptionPane.showConfirmDialog(mainFrame, "Are you want to exit?");
+            int confirmed = JOptionPane.showConfirmDialog(mainFrame, "Do you want to exit?");
             if (confirmed == JOptionPane.YES_OPTION) {
                 mainFrame.dispose();
             }
