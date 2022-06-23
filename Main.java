@@ -29,8 +29,7 @@ public class Main {
         // productListObject.add(product5);
 
         // product initiation
-        String productFilename = "ProductCSV.csv"; // Product CSV filename
-        int productCount = (int) CSVFile.countLine(productFilename);
+        String productFilename = "ProductCSV.csv";  // Product CSV filename, , modify this value to change the filename
         ArrayList<Product> productArrayList = CSVFile.readCSVProductFile(productFilename);
         // Product[] productListObject = new Product[productCount];
         // productListObject = productArrayList.toArray(productListObject);
