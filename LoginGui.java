@@ -14,10 +14,13 @@ public class LoginGui {
     JTextField passwordTextField;
 
     private String nextGui = "";
+    
+    // user data initiation
+    String userFilename = "UserCSV.csv";  // User CSV filename, modify this value to change the filename
 
-    public LoginGui(ArrayList<Product> productList, ArrayList<User> userList, String nextGui) {
+    public LoginGui(ArrayList<Product> productList, String nextGui) {
         this.productList = productList;
-        this.userList = CSVUserfile.readCSVUserFile();
+        this.userList = CSVFile.readCSVUserFile(userFilename);
         this.nextGui = nextGui;
     }
 
@@ -76,7 +79,7 @@ public class LoginGui {
                     loginFrame.dispose();
                     addProduct.display();
                 }
-            } else {  // this code runs for each user itteration, need fixing
+            } else {  
                 JOptionPane.showMessageDialog(loginFrame, "Invalid Employee ID or Password", "Alert",
                         JOptionPane.WARNING_MESSAGE);
             }
