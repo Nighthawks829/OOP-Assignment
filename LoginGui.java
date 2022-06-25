@@ -69,7 +69,7 @@ public class LoginGui {
             }
             
             if (validUser) {
-                JOptionPane.showMessageDialog(null, "Login Successful");
+                JOptionPane.showMessageDialog(loginFrame, "Login Successful");
                 if (nextGui == "editProduct") {
                     EditProductGui editProduct = new EditProductGui(productList);
                     loginFrame.dispose();
