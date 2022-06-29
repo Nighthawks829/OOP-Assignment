@@ -45,7 +45,6 @@ public class ProductGui implements ActionListener {
         JPanel productPanel = new JPanel();
         productPanel.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(), "Product List"));
-        productPanel.setBackground(Color.YELLOW);
         productPanel.setBounds(3, 300, 630, 250);
         productPanel.setLayout(null);
 

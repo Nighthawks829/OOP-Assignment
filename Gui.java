@@ -74,7 +74,6 @@ public class Gui implements ActionListener {
         mainFrame.setJMenuBar(menuBar);
         
         JPanel customerPanel = new JPanel();
-        customerPanel.setBackground(Color.RED);
         customerPanel.setLayout(null);
         customerPanel.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(), "Customer Information"));

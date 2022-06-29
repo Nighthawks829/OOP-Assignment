@@ -1,6 +1,5 @@
 
 import javax.swing.*;
-import java.awt.Color;
 import java.awt.event.*;
 import java.util.ArrayList;
 
@@ -54,7 +53,6 @@ public class PayGui implements ActionListener {
         JPanel payPanel = new JPanel();
         payPanel.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(), "Product List"));
-        payPanel.setBackground(Color.PINK);
         payPanel.setBounds(3, 300, 630, 250);
         payPanel.setLayout(null);
 
