@@ -1,12 +1,15 @@
+
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class PayGui {
+public class PayGui implements ActionListener {
 
     JFrame payFrame;
-
+    JMenuBar menuBar;
+    JMenu menu;
+    JMenuItem exit;
     ButtonGroup payMethodButtonGroup;
 
     JLabel cardNumberLabel;
@@ -23,7 +26,7 @@ public class PayGui {
     JButton printReceiptButton;
     JButton payButton;
     JButton nextRecordButton;
-
+    JRadioButton creditCardRadioButton, debitCardRadioButton, cashRadioButton;
     String recordFilName;
     WriteRecordFile recordFile;
     ArrayList<Product> productListObject;
@@ -38,11 +41,11 @@ public class PayGui {
     public void display() {
         payFrame = new JFrame("Supermarket Point-of-Sales System");
 
-        JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("Menu");
+        menuBar = new JMenuBar();
+        menu = new JMenu("Menu");
 
-        JMenuItem exit = new JMenuItem("Exit");
-        exit.addActionListener(new exitListener());
+        exit = new JMenuItem("Exit");
+        exit.addActionListener(this);
 
         menu.add(exit);
         menuBar.add(menu);
@@ -55,15 +58,15 @@ public class PayGui {
         payPanel.setBounds(3, 300, 630, 250);
         payPanel.setLayout(null);
 
-        JRadioButton creditCardRadioButton = new JRadioButton("Credit Card");
+        creditCardRadioButton = new JRadioButton("Credit Card");
         creditCardRadioButton.setBounds(30, 50, 100, 30);
         payPanel.add(creditCardRadioButton);
 
-        JRadioButton debitCardRadioButton = new JRadioButton("Debit Card");
+        debitCardRadioButton = new JRadioButton("Debit Card");
         debitCardRadioButton.setBounds(30, 80, 100, 30);
         payPanel.add(debitCardRadioButton);
 
-        JRadioButton cashRadioButton = new JRadioButton("Cash");
+        cashRadioButton = new JRadioButton("Cash");
         cashRadioButton.setBounds(30, 110, 100, 30);
         payPanel.add(cashRadioButton);
 
@@ -75,9 +78,9 @@ public class PayGui {
         debitCardRadioButton.setActionCommand("debitCard");
         cashRadioButton.setActionCommand("cash");
 
-        creditCardRadioButton.addActionListener(new creditCardListsner());
-        debitCardRadioButton.addActionListener(new debitCardListener());
-        cashRadioButton.addActionListener(new cashListener());
+        creditCardRadioButton.addActionListener(this);
+        debitCardRadioButton.addActionListener(this);
+        cashRadioButton.addActionListener(this);
 
         cardNumberLabel = new JLabel("Card Number");
         cardNumberLabel.setBounds(180, 50, 300, 30);
@@ -121,18 +124,18 @@ public class PayGui {
 
         payButton = new JButton("Pay");
         payButton.setBounds(150, 215, 150, 25);
-        payButton.addActionListener(new payButtonListener());
+        payButton.addActionListener(this);
         payPanel.add(payButton);
 
         printReceiptButton = new JButton("Print Receipt");
         printReceiptButton.setBounds(150, 215, 150, 25);
-        printReceiptButton.addActionListener(new printReceiptListener());
+        printReceiptButton.addActionListener(this);
         printReceiptButton.setVisible(false);
         payPanel.add(printReceiptButton);
 
         nextRecordButton = new JButton("New Record");
         nextRecordButton.setBounds(150, 265, 150, 25);
-        nextRecordButton.addActionListener(new nextRecordListener());
+        nextRecordButton.addActionListener(this);
         nextRecordButton.setVisible(false);
         payPanel.add(nextRecordButton);
 
@@ -143,19 +146,15 @@ public class PayGui {
         payFrame.setVisible(true);
     }
 
-    class exitListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int confirmed = JOptionPane.showConfirmDialog(payFrame, "Are you want to exit?");
-            if (confirmed == JOptionPane.YES_OPTION) {
-                payFrame.dispose();
+    public void actionPerformed(ActionEvent e) {
+    	if(e.getSource() == exit) {
+        int confirmed = JOptionPane.showConfirmDialog(payFrame, "Are you want to exit?");
+        if (confirmed == JOptionPane.YES_OPTION) {
+         payFrame.dispose();
             }
         }
-    }
-
-    class creditCardListsner implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    
+        if(e.getSource() == creditCardRadioButton) {
             cardNumberLabel.setVisible(true);
             cardNumberTextField.setVisible(true);
             expireDateLabel.setVisible(true);
@@ -166,11 +165,8 @@ public class PayGui {
             payAmountLabel.setVisible(false);
             payAmountTextField.setVisible(false);
         }
-    }
 
-    class debitCardListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    	if(e.getSource() == debitCardRadioButton){
             cardNumberLabel.setVisible(true);
             cardNumberTextField.setVisible(true);
             expireDateLabel.setVisible(true);
@@ -181,11 +177,8 @@ public class PayGui {
             payAmountLabel.setVisible(false);
             payAmountTextField.setVisible(false);
         }
-    }
-
-    class cashListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    
+        if(e.getSource() == cashRadioButton) {
             cardNumberLabel.setVisible(false);
             cardNumberTextField.setVisible(false);
             expireDateLabel.setVisible(false);
@@ -196,11 +189,8 @@ public class PayGui {
             payAmountLabel.setVisible(true);
             payAmountTextField.setVisible(true);
         }
-    }
-
-    class payButtonListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        
+        if(e.getSource() == payButton) {
             try {
                 String paymentMethod = payMethodButtonGroup.getSelection().getActionCommand();
                 String cardNumber = "";
@@ -213,12 +203,14 @@ public class PayGui {
                     ccv = ccveTextField.getText();
                     newRecord.setCreditCard(cardNumber, expireDate, ccv);
                 }
+                /*
                 if (paymentMethod == "debitCard") {
                     cardNumber = cardNumberTextField.getText();
                     expireDate = expireDateTextField.getText();
                     ccv = ccveTextField.getText();
                     newRecord.setDebitCard(cardNumber, expireDate, ccv, cash);
                 }
+                */
                 if (paymentMethod == "cash") {
                     cash = Double.parseDouble(payAmountTextField.getText());
                     newRecord.setCash(cash);
@@ -238,21 +230,15 @@ public class PayGui {
                 System.out.println("Error Data Type");
             }
         }
-    }
 
-    class printReceiptListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == printReceiptButton) {
             String fileName = "receipt.txt";
             WriteReceiptFile receiptFile = new WriteReceiptFile();
             receiptFile.WriteReceipt(newRecord, fileName);
             JOptionPane.showMessageDialog(payFrame, "Successfully Print Receipt");
         }
-    }
-
-    class nextRecordListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    
+        if(e.getSource() == nextRecordButton) {
             Gui newGui = new Gui(productListObject);
             newGui.display();
             payFrame.dispose();

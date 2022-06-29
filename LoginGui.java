@@ -1,22 +1,24 @@
 
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class LoginGui {
+public class LoginGui implements ActionListener {
 
     private ArrayList<Product> productList;
     private ArrayList<User> userList;
 
     JFrame loginFrame;
     JTextField employeeIdTextField;
-    JTextField passwordTextField;
-
+    JPasswordField passwordTextField;
+    JButton loginButton;
+    
     private String nextGui = "";
     
     // user data initiation
-    String userFilename = "UserCSV.csv";  // User CSV filename, modify this value to change the filename
+    String userFilename = "UserCSV.csv";  // User CSV filename, modify this to change filename
 
     public LoginGui(ArrayList<Product> productList, String nextGui) {
         this.productList = productList;
@@ -39,13 +41,13 @@ public class LoginGui {
         passwordLabel.setBounds(120, 170, 300, 30);
         loginFrame.add(passwordLabel);
 
-        passwordTextField = new JTextField();
+        passwordTextField = new JPasswordField();
         passwordTextField.setBounds(220, 175, 150, 20);
         loginFrame.add(passwordTextField);
 
-        JButton loginButton = new JButton("Login");
+        loginButton = new JButton("Login");
         loginButton.setBounds(175, 270, 150, 20);
-        loginButton.addActionListener(new loginListener());
+        loginButton.addActionListener(this);
         loginFrame.add(loginButton);
 
         loginFrame.setSize(500, 500);
@@ -54,9 +56,8 @@ public class LoginGui {
         loginFrame.setVisible(true);
     }
 
-    class loginListener implements ActionListener {
-        @Override
         public void actionPerformed(ActionEvent e) {
+        	if(e.getSource() == loginButton) {
             String id = employeeIdTextField.getText();
             String password = passwordTextField.getText();
             boolean validUser = false;

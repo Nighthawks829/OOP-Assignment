@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 
 import java.awt.Font;
@@ -10,7 +11,7 @@ import java.util.Random;
 
 import java.util.ArrayList;
 
-public class Gui {
+public class Gui implements ActionListener {
     
     // gui attributes
     JFrame mainFrame;
@@ -21,7 +22,10 @@ public class Gui {
     JTextField phoneNumberTextField;
     JTextField customerAddressTextField;
     JButton firstPageButton;
-
+    JMenuItem loadData, editProduct, addProduct, exit;
+    //ImageIcon supermarketIcon;
+    //JLabel displayImage;
+    
     // non-gui attributes
     Customer newCustomer;
     Record newRcord;
@@ -51,15 +55,15 @@ public class Gui {
         JMenu menu = new JMenu("Menu");
 
         // Menu bar item
-        JMenuItem loadData = new JMenuItem("Load Data");
-        JMenuItem editProduct = new JMenuItem("Edit Product");
-        JMenuItem addProduct = new JMenuItem("Add Product");
-        JMenuItem exit = new JMenuItem("Exit");
+        loadData = new JMenuItem("Load Data");
+        editProduct = new JMenuItem("Edit Product");
+        addProduct = new JMenuItem("Add Product");
+        exit = new JMenuItem("Exit");
 
-        loadData.addActionListener(new loadDataListener());
-        exit.addActionListener(new exitListener());
-        editProduct.addActionListener(new editProductListener());
-        addProduct.addActionListener(new addProductListener());
+        loadData.addActionListener(this);
+        exit.addActionListener(this);
+        editProduct.addActionListener(this);
+        addProduct.addActionListener(this);
 
         menu.add(loadData);
         menu.add(editProduct);
@@ -68,7 +72,7 @@ public class Gui {
 
         menuBar.add(menu);
         mainFrame.setJMenuBar(menuBar);
-
+        
         JPanel customerPanel = new JPanel();
         customerPanel.setBackground(Color.RED);
         customerPanel.setLayout(null);
@@ -76,7 +80,12 @@ public class Gui {
                 BorderFactory.createEtchedBorder(), "Customer Information"));
 
         mainFrame.add(customerPanel);
-
+        
+        //supermarketIcon = new ImageIcon(this.getClass().getResource("Supermarket.jpg"));
+        //displayImage = new JLabel(supermarketIcon);
+        //displayImage.setSize(200,200);
+        //displayImage.add(customerPanel);
+        
         JLabel recordIdLabel = new JLabel("Record ID: " + newRcord.getRecordId());
         recordIdLabel.setBounds(175, 20, 300, 30);
         customerPanel.add(recordIdLabel);
@@ -125,7 +134,7 @@ public class Gui {
         firstPageButton.setBounds(200, 360, 100, 20);
 
         customerPanel.add(firstPageButton);
-        firstPageButton.addActionListener(new nextPageListener());
+        firstPageButton.addActionListener(this);
 
         mainFrame.setSize(500, 500);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -133,11 +142,9 @@ public class Gui {
         mainFrame.setVisible(true);
     }
 
-    class loadDataListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // mainFrame.dispose();
-            JFrame readFrame = new JFrame("Record");
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == loadData) {
+        	JFrame readFrame = new JFrame("Record");
 
             JTextArea outpuTextArea = new JTextArea("output");
             outpuTextArea.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -157,37 +164,24 @@ public class Gui {
             readFrame.setLayout(null);
             readFrame.setVisible(true);
         }
-    }
-
-    class editProductListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    
+        if(e.getSource() == editProduct) {
             LoginGui loginGui = new LoginGui(productListObject, "editProduct");
             loginGui.display();
         }
-    }
 
-    class addProductListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == addProduct) {
             LoginGui loginGui = new LoginGui(productListObject, "addProduct");
             loginGui.display();
         }
-    }
 
-    class exitListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == exit) {
             int confirmed = JOptionPane.showConfirmDialog(mainFrame, "Do you want to exit?");
             if (confirmed == JOptionPane.YES_OPTION) {
                 mainFrame.dispose();
             }
         }
-    }
-
-    class nextPageListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == firstPageButton){
             createCustomer();
             mainFrame.dispose();
             ProductGui productGui = new ProductGui(newRcord, productListObject);

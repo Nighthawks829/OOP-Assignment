@@ -1,8 +1,9 @@
+
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class AddProductGui {
+public class AddProductGui implements ActionListener {
     private ArrayList<Product> productList;
 
     JFrame addProductFrame;
@@ -10,7 +11,7 @@ public class AddProductGui {
     JTextField productNametTextField;
     JTextField productPriceTextField;
     JTextField productQuantityTextField;
-    JButton ediButton;
+    JButton ediButton, ediProductButton;
 
     public AddProductGui(ArrayList<Product> productList) {
         this.productList = productList;
@@ -51,9 +52,9 @@ public class AddProductGui {
         productQuantityTextField.setBounds(210, 255, 200, 20);
         addProductFrame.add(productQuantityTextField);
 
-        JButton ediProductButton = new JButton("Add Product");
+        ediProductButton = new JButton("Add Product");
         ediProductButton.setBounds(175, 355, 150, 20);
-        ediProductButton.addActionListener(new addProductListener());
+        ediProductButton.addActionListener(this);
         addProductFrame.add(ediProductButton);
 
         addProductFrame.setSize(500, 500);
@@ -62,9 +63,8 @@ public class AddProductGui {
         addProductFrame.setVisible(true);
     }
 
-    class addProductListener implements ActionListener {
-        @Override
         public void actionPerformed(ActionEvent e) {
+        	if(e.getSource() == ediProductButton) {
             String id = productIdTextField.getText();
             String name = productNametTextField.getText();
             double price = Double.parseDouble(productPriceTextField.getText());

@@ -1,9 +1,10 @@
+
 import javax.swing.*;
 
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Vector;
-public class EditProductGui {
+public class EditProductGui implements ActionListener {
 
     private ArrayList<Product> productList;
     JFrame editProductFrame;
@@ -12,7 +13,7 @@ public class EditProductGui {
     JTextField productNametTextField;
     JTextField productPriceTextField;
     JTextField productQuantityTextField;
-    JButton ediButton;
+    JButton ediButton, ediProductButton;
     
     public EditProductGui(ArrayList<Product> productList) {
         this.productList = productList;
@@ -28,7 +29,7 @@ public class EditProductGui {
         // productComboBox = new JComboBox<Product>(productList.toArray());
         productComboBox = new JComboBox<Product>(new Vector<Product>(productList));
         productComboBox.setBounds(180, 55, 250, 20);
-        productComboBox.addActionListener(new productListener());
+        productComboBox.addActionListener(this);
         editProductFrame.add(productComboBox);
 
         JLabel productIdLabel = new JLabel("Product ID");
@@ -63,9 +64,9 @@ public class EditProductGui {
         productQuantityTextField.setBounds(180, 255, 200, 20);
         editProductFrame.add(productQuantityTextField);
 
-        JButton ediProductButton = new JButton("Edit Product");
+        ediProductButton = new JButton("Edit Product");
         ediProductButton.setBounds(175, 355, 150, 20);
-        ediProductButton.addActionListener(new editProductListener());
+        ediProductButton.addActionListener(this);
         editProductFrame.add(ediProductButton);
 
         editProductFrame.setSize(500, 500);
@@ -74,9 +75,8 @@ public class EditProductGui {
         editProductFrame.setVisible(true);
     }
 
-    class productListener implements ActionListener {
-        @Override
         public void actionPerformed(ActionEvent e) {
+        	if (e.getSource() == productComboBox) {
             Product selectedProduct = (Product) productComboBox.getSelectedItem();
             String id = selectedProduct.getId();
             String name = selectedProduct.getName();
@@ -88,11 +88,8 @@ public class EditProductGui {
             productPriceTextField.setText(String.valueOf(price));
             productQuantityTextField.setText(String.valueOf(quantity));
         }
-    }
-
-    class editProductListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        
+        if(e.getSource() == ediProductButton){
             Product selectedProduct = (Product) productComboBox.getSelectedItem();
             String id = productIdTextField.getText();
             String name = productNametTextField.getText();
@@ -104,5 +101,5 @@ public class EditProductGui {
             selectedProduct.setQuantity(quantity);
             JOptionPane.showMessageDialog(editProductFrame, "Successfully Update Product");
         }
-    }
+        }
 }

@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import java.awt.Color;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -6,7 +7,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Vector;
 
-public class ProductGui {
+public class ProductGui implements ActionListener {
 
     Record newRecord;
 
@@ -18,7 +19,11 @@ public class ProductGui {
     JTable productTable;
     JLabel totalAfterTaxLabel;
     JLabel totalBeforeTaxLabel;
-
+    JMenuBar menuBar;
+    JMenu menu;
+    JMenuItem exit;
+    JButton addProductButton, payFrameButton;
+    
     public ProductGui(Record newRecord, ArrayList<Product> productListObject) {
         this.newRecord = newRecord;
         this.productListObject = productListObject;
@@ -27,11 +32,11 @@ public class ProductGui {
     public void display() {
         productFrame = new JFrame("Supermarket Point-of-Sales System");
 
-        JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("Menu");
+        menuBar = new JMenuBar();
+        menu = new JMenu("Menu");
 
-        JMenuItem exit = new JMenuItem("Exit");
-        exit.addActionListener(new exitListener());
+        exit = new JMenuItem("Exit");
+        exit.addActionListener(this);
 
         menu.add(exit);
         menuBar.add(menu);
@@ -50,7 +55,7 @@ public class ProductGui {
 
         productComboBox = new JComboBox<Product>(new Vector<Product>(productListObject));
         productComboBox.setBounds(130, 35, 250, 20);
-        productComboBox.addActionListener(new productListener());
+        productComboBox.addActionListener(this);
         productPanel.add(productComboBox);
 
         SpinnerModel value = new SpinnerNumberModel(1, 1, 100, 1);
@@ -58,9 +63,9 @@ public class ProductGui {
         productSpinner.setBounds(395, 35, 50, 20);
         productPanel.add(productSpinner);
 
-        JButton addProductButton = new JButton("Add Product");
+        addProductButton = new JButton("Add Product");
         addProductButton.setBounds(460, 35, 150, 20);
-        addProductButton.addActionListener(new addProductButton());
+        addProductButton.addActionListener(this);
         productPanel.add(addProductButton);
 
         quantityLabel = new JLabel("Quantity Left:");
@@ -117,9 +122,9 @@ public class ProductGui {
         totalAfterTaxLabel.setBounds(405, 380, 300, 30);
         productPanel.add(totalAfterTaxLabel);
 
-        JButton payFrameButton = new JButton("Pay");
+        payFrameButton = new JButton("Pay");
         payFrameButton.setBounds(225, 410, 150, 20);
-        payFrameButton.addActionListener(new payFrameListener());
+        payFrameButton.addActionListener(this);
         productPanel.add(payFrameButton);
 
         productFrame.add(productPanel);
@@ -130,19 +135,15 @@ public class ProductGui {
         productFrame.setVisible(true);
     }
 
-    class exitListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == exit) {
             int confirmed = JOptionPane.showConfirmDialog(productFrame, "Are you want to exit?");
             if (confirmed == JOptionPane.YES_OPTION) {
                 productFrame.dispose();
             }
         }
-    }
-
-    class productListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    
+        if(e.getSource() == productComboBox) {
             Product selectProduct = (Product) productComboBox.getSelectedItem();
             int quantity = selectProduct.getQuantity();
             if (quantity < 10) {
@@ -153,11 +154,8 @@ public class ProductGui {
             String leftQuantity = "Left Quantity: " + quantity;
             quantityLabel.setText(leftQuantity);
         }
-    }
-
-    class addProductButton implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    
+        if(e.getSource() == addProductButton) {
             try {
                 Product selectedProduct = (Product) productComboBox.getSelectedItem();
 
@@ -190,11 +188,8 @@ public class ProductGui {
                 System.out.println("Error Data Type");
             }
         }
-    }
-
-    class payFrameListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    
+        if(e.getSource() == payFrameButton) {
             productFrame.dispose();
             PayGui payGui = new PayGui(newRecord,productListObject);
             payGui.display();
